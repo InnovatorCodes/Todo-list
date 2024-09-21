@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GottaDo</title>
+</head>
+<body>
+    <div class="header">
+        GottaDo
+    </div>
+    <dialog id="createlist">
+        <div class="heading">
+            <h2>Create New List</h2>
+            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+        </div>
+        <form>
+            <div>
+                <label for="title">Title: </label>
+                <input type="text" name="title" id="title">
+            </div>
+            <div class="buttons">
+                <button type="submit">Create List</button>
+            </div>
+        </form>
+    </dialog>
+    <div class="main">
+        <div class="sidebar">
+            <div class="organise">
+                <div class="all">
+                    <img src="./images/calendar-all.svg" alt="calendar-all-icon">
+                    All
+                </div>
+                <div class="today">
+                    <img src="./images/calendar-today.svg" alt="calendar-today-icon">
+                    Today
+                </div>
+                <div class="week">
+                    <img src="./images/calendar-week.svg" alt="calendar-week-icon">
+                    This Week
+                </div>
+                <div class="important">
+                    <img src="./images/calendar-important.svg" alt="calendar-important-icon">
+                    Important
+                </div>
+                <div class="completed">
+                    <img src="./images/calendar-completed.svg" alt="calendar-completed-icon">
+                    Completed
+                </div>
+            </div>
+            <div class="lists">
+                <div class="heading">Lists <img src="./images/add.svg" alt="add-list" class="addlistbtn"></div>
+                <div class="tasks selected">
+                    <img src="./images/list.svg" alt="list-icon">
+                    My Tasks
+                </div>
+            </div>
+        </div>
+        <div class="content"></div>
+        <div class="notes">
+        </div>
+    </div>
+</body>
+</html>

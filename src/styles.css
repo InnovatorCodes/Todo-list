@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela&display=swap');
+@font-face {
+    font-family: 'biko';
+    src: url('./fonts/Biko_Bold.otf');
+}
+
+*:not(dialog){
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+*{
+    font-family: "Varela", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.2rem;
+}
+
+body{
+    display: grid;
+    grid-template-rows: 1fr 8fr;
+    height: 100vh;
+}
+
+.main{
+    display: grid;
+    grid-template-columns: 1fr 3fr 1.3fr;
+}
+
+.header{
+    background-color: #1E2A38   ;
+    font-family: 'biko';
+    color: #DDE6ED;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.sidebar{
+    background-color: #2A3C50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 0;
+    padding-top: 0;
+    color: #DDE6ED;
+    font-family: "Varela", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.2rem;
+    gap: 30px;
+}
+
+.sidebar div div{
+    padding: 10px 10%;
+}
+
+.sidebar div div.selected{
+    background-color: #223041;
+    font-weight: 600;
+}
+
+.sidebar div div:hover:not(.heading){
+    background-color: #36495f;
+    cursor: pointer;
+}
+
+.sidebar div div.selected:hover:not(.heading){
+    background-color: #223041;
+    cursor: pointer;
+    transition:  all 0.5s ease;
+}
+
+.organise{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+}
+
+.organise div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.sidebar img{
+    width: 35px;
+}
+
+.lists{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.lists .heading{
+    font-size: 2.5rem;
+    border-bottom: 1px solid white;
+    padding: 0 10%;
+    width: 100%;
+    display: flex;
+    align-items: center ;
+    justify-content: space-between;
+}
+
+.lists div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.addlistbtn:hover{
+    transform: scale(1.2);
+}
+
+.addlistbtn{
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+#createlist[open]{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-radius: 16px;
+    background-color: #E3E8ED;
+}
+
+#createlist img{
+    width: 20px;
+}
+
+#createlist .heading img{
+    margin-left: auto;
+}
+
+#createlist .heading{
+    display: flex;
+    width: 100%;
+}
+
+#createlist form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#createlist label{
+    font-size: 1rem;
+}
+
+#createlist #title{
+    padding: 0.35rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+    border: none;
+    font-weight: 400;
+}
+
+#createlist #title:focus-visible{
+    outline: none;
+    border: 1px solid black;
+}
+
+#createlist form div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#createlist button{
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: white;
+    background-color: #4eaffa;
+    border: none;
+    outline: none;
+}
+
+.content{
+    background-color: #3A4F63;
+}
+
+.notes{
+    background-color: #4B6179;
+}
