@@ -6,5 +6,6 @@
    devtool: 'inline-source-map',
    devServer: {
      static: './dist',
+     watchFiles: ["./src/template.html"],
    },
  });

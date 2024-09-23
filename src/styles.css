@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 @font-face {
     font-family: 'biko';
     src: url('./fonts/Biko_Bold.otf');
+}
+
+:root{
+    --varela-font:"Varela", sans-serif;
 }
 
 *:not(dialog){
@@ -11,10 +17,11 @@
 }
 
 *{
-    font-family: "Varela", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    font-size: 1.2rem;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
 body{
@@ -51,23 +58,29 @@ body{
     font-style: normal;
     font-size: 1.2rem;
     gap: 30px;
+    min-width: 300px;
 }
 
-.sidebar div div{
-    padding: 10px 10%;
+.sidebar>div>div{
+    padding: 0 0;
+    height: 3.5rem;
 }
 
-.sidebar div div.selected{
+.sidebar>div>div>*:first-child{
+    margin-left: 10%;
+}
+
+.sidebar>div>div.selected{
     background-color: #223041;
     font-weight: 600;
 }
 
-.sidebar div div:hover:not(.heading){
+.sidebar>div>div:hover:not(.heading){
     background-color: #36495f;
     cursor: pointer;
 }
 
-.sidebar div div.selected:hover:not(.heading){
+.sidebar>div>div.selected:hover:not(.heading){
     background-color: #223041;
     cursor: pointer;
     transition:  all 0.5s ease;
@@ -110,6 +123,7 @@ body{
 
 .lists div{
     width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -124,6 +138,10 @@ body{
     transition: all 0.5s ease;
 }
 
+dialog{
+    box-shadow: 0 0 20px rgb(30, 30, 30);
+}
+
 #createlist[open]{
     display: flex;
     flex-direction: column;
@@ -131,10 +149,22 @@ body{
     gap: 20px;
     border-radius: 16px;
     background-color: #E3E8ED;
+    outline: none;
+    border: none;
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    width: 20vw;
+    height: 20vh;
+    min-width: 350px;
 }
 
-#createlist img{
+#createlist .cancelbtn{
     width: 20px;
+    transition: all 0.2s ease;
+}
+
+#createlist .cancelbtn:hover{
+    transform: scale(1.3);
 }
 
 #createlist .heading img{
@@ -149,45 +179,61 @@ body{
 #createlist form{
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
     gap: 20px;
+    width: 100%;
+    height: 100%;
 }
 
 #createlist label{
-    font-size: 1rem;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 1.2rem;
 }
 
 #createlist #title{
     padding: 0.35rem 0.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     border-radius: 0.3rem;
     border: none;
     font-weight: 400;
+    width: 100%;
+    height: 100%;
 }
 
 #createlist #title:focus-visible{
-    outline: none;
-    border: 1px solid black;
+    outline: 1px solid black;
+    border: none;
 }
 
 #createlist form div{
     display: flex;
     gap: 10px;
     align-items: center;
+    width: 100%;
 }
 
 #createlist button{
     border-radius: 2rem;
     padding: 0.5rem 1rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    font-style: normal;
     color: white;
     background-color: #4eaffa;
     border: none;
     outline: none;
+    transition: all 0.5s ease;
+}
+
+#createlist button:hover{
+    transform: scale(1.1);
 }
 
 .content{
     background-color: #3A4F63;
+    padding: 1rem 1rem;
 }
 
 .notes{
