@@ -17,7 +17,7 @@
         <form>
             <div>
                 <label for="title">Title: </label>
-                <input type="text" name="title" id="title">
+                <input type="text" name="title" id="title" required>
             </div>
             <button type="submit">Create List</button>
         </form>
@@ -51,8 +51,20 @@
             </div>
         </div>
         <div class="content">
-            <div>
-                
+            <div class="heading"><img src="./images/list.svg" alt="list-icon">My Tasks</div>
+            <div class="tasks">
+                <div class="task">
+                    <div class="primary">
+                        <img src="./images/incomplete.svg" alt="">
+                        <div class="title">Hello</div>
+                        <div class="date">23-09-2024</div>
+                        <img src="./images/unimportant.svg" alt="unimportant" class="priority">
+                        <img src="./images/edit.svg" alt="edit-task" class="edit">
+                    </div>
+                    <div class="desc">
+                        Hi, this is a template task that I have added to the UI to customise the styles
+                    </div>
+                </div>
             </div>
         </div>
         <div class="notes">

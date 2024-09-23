@@ -8,6 +8,7 @@
 
 :root{
     --varela-font:"Varela", sans-serif;
+    --raleway-font: "Raleway", sans-serif;
 }
 
 *:not(dialog){
@@ -129,6 +130,27 @@ body{
     gap: 10px;
 }
 
+.list .deletebtn{
+    display: none;
+    margin-right: 5%;
+    opacity: 0;
+}
+
+@keyframes fadeIn{
+    from {
+        opacity: 0;
+    }
+
+    to{
+        opacity: 1;
+    }
+}
+
+.list:hover .deletebtn{
+    display: flex;
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
 .addlistbtn:hover{
     transform: scale(1.2);
 }
@@ -151,7 +173,7 @@ dialog{
     background-color: #E3E8ED;
     outline: none;
     border: none;
-    font-family: "Raleway", sans-serif;
+    font-family: var(--raleway-font);
     font-optical-sizing: auto;
     width: 20vw;
     height: 20vh;
@@ -234,6 +256,99 @@ dialog{
 .content{
     background-color: #3A4F63;
     padding: 1rem 1rem;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tasks{
+    width: 100%;
+}
+
+.content .heading{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    color: white;
+    font-family: var(--raleway-font);
+    font-weight: 500;
+    font-size: 2.7rem;
+}
+
+.tasks .task{
+    min-width: 100%;
+    min-height: 50px;
+    max-height: 0.8rem;
+    border: 2px solid white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0.4rem 0.5rem;
+    padding-right: 0.8rem;
+    overflow: hidden;
+    cursor: pointer;
+    animation: collapse 0.5s ease-in-out forwards;
+}
+
+@keyframes collapse {
+    from {
+        max-height: 500px;
+    }    
+    to {
+        max-height:0.8rem;
+    }
+}
+
+@keyframes expand {
+    from {
+        max-height: 0.8rem;
+    }    
+    to {
+        max-height:500px;
+    }
+}
+
+.tasks .task.expand{
+    max-height: 500px;
+    animation: expand 0.5s ease-in-out forwards;
+}
+
+.task img{
+    width: 2rem;
+}
+
+.task .primary, .desc{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.task .title{
+    font-family: var(--varela-font);
+    font-size: 1.5rem;
+    color: white;
+    margin-right: auto;
+}
+
+.task .desc{
+    font-family: var(--varela-font);
+}
+
+.task .priority, .edit{
+    width: 1.7rem;
+}
+.task .date{
+    color: white;
+    font-family: var(--varela-font);
+}
+
+.content .heading img{
+    width: 3.7rem;
 }
 
 .notes{

@@ -1,6 +1,8 @@
 import "./styles.css";
 import listsvg from './images/list.svg';
+import deletesvg from './images/delete.svg';
 import displayAllTasks from "./all-tasks";
+import { ta } from "date-fns/locale";
 
 let currentTab='mytasks', selectedIndex=0, listCount=0;
 const storage={
@@ -32,7 +34,6 @@ createListForm.addEventListener('submit',(event)=>{
     event.preventDefault();
     let title=titleinput.value;
     createList(title);
-    //addListToUI(list);
     resetInputs(createListForm);
     createListDialog.close();
 })
@@ -51,7 +52,10 @@ function createList(title){
     const div=document.createElement('div');
     div.textContent=list.listTitle;
     listimg.src=listsvg;
-    newlist.append(listimg,div);
+    const deletebtn=document.createElement('img');
+    deletebtn.src=deletesvg;
+    deletebtn.classList.add('deletebtn');
+    newlist.append(listimg,div,deletebtn);
     lists.appendChild(newlist);
 }
 
@@ -88,6 +92,9 @@ document.addEventListener('click',(event)=>{
     if(target.classList.contains('addlistbtn')){
         createListDialog.showModal();
     }
+    if(target.classList.contains('deletebtn')){
+        
+    }
     if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
         let index;
         if(target.hasAttribute('data-listnum')) index=target.dataset.listnum;
@@ -96,6 +103,11 @@ document.addEventListener('click',(event)=>{
             selectedIndex=index;
             changeSelected('lists',index);
         }
+    }
+    if(target.classList.contains('primary') || target.classList.contains('title') || target.classList.contains('task')){
+        if(target.classList.contains('primary')) target=target.parentNode;
+        if(target.classList.contains('title')) target=target.parentNode.parentNode;
+        target.classList.toggle('expand');
     }
 })
 
