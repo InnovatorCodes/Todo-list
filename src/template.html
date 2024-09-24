@@ -16,10 +16,35 @@
         </div>
         <form>
             <div>
-                <label for="title">Title: </label>
-                <input type="text" name="title" id="title" required>
+                <label for="title">Title</label>
+                <input type="text" id="title" class="title" required>
             </div>
             <button type="submit">Create List</button>
+        </form>
+    </dialog>
+    <dialog id="addTask">
+        <div class="heading">
+            <h2>Add Task</h2>
+            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+        </div>
+        <form>
+            <div>
+                <label for="title">Title</label>
+                <input type="text" id="title" placeholder="What do you want to do?" class="title" required>
+            </div>
+            <div>
+                <label for="desc">Description</label>
+                <textarea id="desc" class="date" rows="3" placeholder="(If you want to give one)"></textarea>
+            </div>
+            <div>
+                <label for="date">Due Date</label>
+                <input type="date" id="date" class="date" required>
+            </div>
+            <div class="priority">
+                <input type="checkbox" id="priority">
+                <label for="priority">Mark this task as important</label>
+            </div>
+            <button type="submit">Add List</button>
         </form>
     </dialog>
     <div class="main">
@@ -51,7 +76,8 @@
             </div>
         </div>
         <div class="content">
-            <div class="heading"><img src="./images/list.svg" alt="list-icon">My Tasks</div>
+            <div class="heading"><img src="./images/list.svg" alt="list-icon"><div>My Tasks</div></div>
+            <div class="addTask"><img src="./images/add.svg" alt="add-task"><div>Add Task</div></div>
             <div class="tasks">
                 <div class="task">
                     <div class="primary">

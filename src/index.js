@@ -1,13 +1,10 @@
 import "./styles.css";
-import listsvg from './images/list.svg';
-import deletesvg from './images/delete.svg';
 import displayAllTasks from "./all-tasks";
+import { createList } from "./manageLists";
 import { ta } from "date-fns/locale";
 
-let currentTab='mytasks', selectedIndex=0, listCount=0;
-const storage={
-    "lists": []
-};
+let currentTab='mytasks', selectedIndex=0;
+const listStorage=[];
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
@@ -17,13 +14,18 @@ function resetInputs(form){
 
 const content=document.querySelector('.content');
 const createListDialog = document.querySelector('dialog#createlist');
+const addTaskDialog =document.querySelector('dialog#addTask');
 const createListForm=document.querySelector('#createlist form');
-const cancelbtn=document.querySelector('#createlist .cancelbtn');
-const titleinput=document.querySelector('#createlist #title');
+const addTaskForm= document.querySelector('#addTask form');
+const cancelbtns=document.querySelectorAll('dialog .cancelbtn');
+const titleinput=document.querySelector('dialog .title');
 const lists=document.querySelector('.lists');
-cancelbtn.addEventListener('click',()=>{
-    resetInputs(createListForm);
-    createListDialog.close()
+
+cancelbtns.forEach((btn)=>{
+    btn.addEventListener('click',()=>{
+        resetInputs(createListForm);
+        btn.parentNode.parentNode.close();
+    })
 })
 createListDialog.addEventListener('cancel',(event)=>{
     event.preventDefault();
@@ -37,27 +39,20 @@ createListForm.addEventListener('submit',(event)=>{
     resetInputs(createListForm);
     createListDialog.close();
 })
+addTaskDialog.addEventListener('cancel',(event)=>{
+    event.preventDefault();
+    resetInputs(addTaskForm);
+    addTaskDialog.close();
+})
+addTaskForm.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    let title=titleinput.value;
+    console.log(title);
+    //createList(title);
+    resetInputs(addTaskForm);
+    addTaskDialog.close();
+})
 
-function createList(title){
-    let list = {
-        listTitle: title,
-        listTasks: []
-    }
-    storage.lists.push(list);
-    const newlist=document.createElement('div');
-    newlist.dataset.listnum=listCount;
-    listCount++;
-    newlist.classList.add('list');
-    const listimg=document.createElement('img');
-    const div=document.createElement('div');
-    div.textContent=list.listTitle;
-    listimg.src=listsvg;
-    const deletebtn=document.createElement('img');
-    deletebtn.src=deletesvg;
-    deletebtn.classList.add('deletebtn');
-    newlist.append(listimg,div,deletebtn);
-    lists.appendChild(newlist);
-}
 
 function changeSelected(classname,index){
     let currentSelected=document.querySelector('.selected');
@@ -109,8 +104,12 @@ document.addEventListener('click',(event)=>{
         if(target.classList.contains('title')) target=target.parentNode.parentNode;
         target.classList.toggle('expand');
     }
+    if(target.classList.contains('addTask') || target.parentNode.classList.contains('addTask')){
+        addTaskDialog.showModal();
+    }
+
 })
 
 //STARTUP
-createList("My Tasks");
+createList("My Tasks",listStorage,lists);
 changeSelected('lists',0);
