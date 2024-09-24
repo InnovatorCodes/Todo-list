@@ -1,7 +1,7 @@
 import "./styles.css";
 import displayAllTasks from "./all-tasks";
 import { createList } from "./manageLists";
-import { ta } from "date-fns/locale";
+import { addTask, findTask } from "./manageTasks";
 
 let currentTab='mytasks', selectedIndex=0;
 const listStorage=[];
@@ -10,6 +10,8 @@ function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
         inputelem.value='';
     })
+    let textarea=form.querySelector('textarea');
+    if(textarea) textarea.value='';
 }
 
 const content=document.querySelector('.content');
@@ -18,12 +20,11 @@ const addTaskDialog =document.querySelector('dialog#addTask');
 const createListForm=document.querySelector('#createlist form');
 const addTaskForm= document.querySelector('#addTask form');
 const cancelbtns=document.querySelectorAll('dialog .cancelbtn');
-const titleinput=document.querySelector('dialog .title');
 const lists=document.querySelector('.lists');
 
 cancelbtns.forEach((btn)=>{
-    btn.addEventListener('click',()=>{
-        resetInputs(createListForm);
+    btn.addEventListener('click',(event)=>{
+        resetInputs(event.target.parentNode.parentNode);
         btn.parentNode.parentNode.close();
     })
 })
@@ -34,8 +35,8 @@ createListDialog.addEventListener('cancel',(event)=>{
 })
 createListForm.addEventListener('submit',(event)=>{
     event.preventDefault();
-    let title=titleinput.value;
-    createList(title);
+    let title=document.querySelector('#createlist .title');
+    createList(title,listStorage,lists);
     resetInputs(createListForm);
     createListDialog.close();
 })
@@ -46,9 +47,11 @@ addTaskDialog.addEventListener('cancel',(event)=>{
 })
 addTaskForm.addEventListener('submit',(event)=>{
     event.preventDefault();
-    let title=titleinput.value;
-    console.log(title);
-    //createList(title);
+    let title=document.querySelector('#addTask .title').value;
+    let desc=document.querySelector('#addTask .desc').value;
+    let priority=document.querySelector('#addTask .priority').checked;
+    let date=new Date(document.querySelector('#addTask .date').value);
+    addTask(title,date,priority,desc,listStorage,selectedIndex);
     resetInputs(addTaskForm);
     addTaskDialog.close();
 })
@@ -99,12 +102,30 @@ document.addEventListener('click',(event)=>{
             changeSelected('lists',index);
         }
     }
-    if(target.classList.contains('primary') || target.classList.contains('title') || target.classList.contains('task')){
-        if(target.classList.contains('primary')) target=target.parentNode;
-        if(target.classList.contains('title')) target=target.parentNode.parentNode;
-        target.classList.toggle('expand');
+    if(target.classList.contains('more')){
+        let morebtn=target;
+        target=target.parentNode.parentNode;
+        let taskref=target.dataset.taskRef;
+        let desc=findTask(listStorage[selectedIndex],taskref)[0].description;
+        if(desc!=''){
+            morebtn.classList.toggle('more');
+            morebtn.classList.toggle('less');
+            const descDiv=document.createElement('div');
+            descDiv.textContent=desc;
+            descDiv.classList.add('desc');
+            target.appendChild(descDiv);
+        }
     }
-    if(target.classList.contains('addTask') || target.parentNode.classList.contains('addTask')){
+    if(target.classList.contains('less')){
+        let lessbtn=target;
+        target=target.parentNode.parentNode;
+        const descDiv=target.querySelector('.desc');
+        target.removeChild(descDiv);
+        lessbtn.classList.toggle('less');
+        lessbtn.classList.toggle('more');
+    }
+
+    if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
         addTaskDialog.showModal();
     }
 
@@ -113,3 +134,5 @@ document.addEventListener('click',(event)=>{
 //STARTUP
 createList("My Tasks",listStorage,lists);
 changeSelected('lists',0);
+const today = (new Date()).toISOString().split('T')[0];
+document.querySelector('#addTask .date').min=today;

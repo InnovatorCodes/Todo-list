@@ -240,9 +240,10 @@ dialog textarea{
     border: none;
     font-weight: 400;
     width: 100%;
+    color: black;
 }
 
-dialog .priority{
+dialog .prioritydiv{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -297,7 +298,7 @@ dialog button:hover{
     width: 100%;
 }
 
-.addTask{
+.addTaskbtn{
     display: flex;
     align-self: end;
     align-items: center;
@@ -307,19 +308,19 @@ dialog button:hover{
     margin-bottom: 0.2rem;
 }
 
-.addTask:hover{
+.addTaskbtn:hover{
     background-color: var(--selectedTabBGColor);
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
 
-.addTask div{
+.addTaskbtn div{
     font-family: var(--varela-font);
     font-size: 1.3rem;
     color: white;
 }
 
-.addTask img{
+.addTaskbtn img{
     width: 2rem;
 }
 
@@ -333,10 +334,15 @@ dialog button:hover{
     font-size: 2.7rem;
 }
 
+.tasks{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .tasks .task{
     min-width: 100%;
     min-height: 50px;
-    max-height: 0.8rem;
     border: 2px solid white;
     border-radius: 8px;
     display: flex;
@@ -347,37 +353,18 @@ dialog button:hover{
     padding-right: 0.8rem;
     overflow: hidden;
     cursor: pointer;
-    animation: collapse 0.5s ease-in-out forwards;
-}
-
-@keyframes collapse {
-    from {
-        max-height: 500px;
-    }    
-    to {
-        max-height:0.8rem;
-    }
-}
-
-@keyframes expand {
-    from {
-        max-height: 0.8rem;
-    }    
-    to {
-        max-height:500px;
-    }
+    animation: fadeIn 0.3s ease-in-out forwards
 }
 
 .tasks .task.expand{
-    max-height: 500px;
-    animation: expand 0.5s ease-in-out forwards;
+    transition: all 0.5s ease;
 }
 
 .task img{
     width: 2rem;
 }
 
-.task .primary, .desc{
+.task .primary, .task .desc{
     display: flex;
     width: 100%;
     align-items: center;
@@ -402,6 +389,10 @@ dialog button:hover{
 .task .date{
     color: white;
     font-family: var(--varela-font);
+}
+
+.task .less{
+    transform: rotate(180deg);
 }
 
 .content .heading img{
