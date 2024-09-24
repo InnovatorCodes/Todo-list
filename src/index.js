@@ -1,9 +1,10 @@
 import "./styles.css";
 import displayAllTasks from "./all-tasks";
-import { createList } from "./manageLists";
-import { addTask, findTask, changeCompletion, changePriority } from "./manageTasks";
+import { createList,deleteList, createListPage } from "./manageLists";
+import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 
-let currentTab='mytasks', selectedIndex=0;
+let currentTab='mytasks', selectedIndex=0, editingTask=false, editTaskElem;
+let maindiv;
 const listStorage=[];
 
 function resetInputs(form){
@@ -20,7 +21,6 @@ const addTaskDialog =document.querySelector('dialog#addTask');
 const createListForm=document.querySelector('#createlist form');
 const addTaskForm= document.querySelector('#addTask form');
 const cancelbtns=document.querySelectorAll('dialog .cancelbtn');
-const lists=document.querySelector('.lists');
 
 cancelbtns.forEach((btn)=>{
     btn.addEventListener('click',(event)=>{
@@ -35,8 +35,8 @@ createListDialog.addEventListener('cancel',(event)=>{
 })
 createListForm.addEventListener('submit',(event)=>{
     event.preventDefault();
-    let title=document.querySelector('#createlist .title');
-    createList(title,listStorage,lists);
+    let title=document.querySelector('#createlist .titleinput').value;
+    createList(title,listStorage);
     resetInputs(createListForm);
     createListDialog.close();
 })
@@ -47,12 +47,20 @@ addTaskDialog.addEventListener('cancel',(event)=>{
 })
 addTaskForm.addEventListener('submit',(event)=>{
     event.preventDefault();
-    let title=document.querySelector('#addTask .title').value;
-    let desc=document.querySelector('#addTask .desc').value;
-    let priority=document.querySelector('#addTask .priority').checked;
-    let date=new Date(document.querySelector('#addTask .date').value);
-    addTask(title,date,priority,desc,listStorage,selectedIndex);
+    let title=document.querySelector('#addTask .titleinput').value;
+    let desc=document.querySelector('#addTask .descinput').value;
+    let priority=document.querySelector('#addTask .priorityinput').checked;
+    let date=new Date(document.querySelector('#addTask .dateinput').value);
+    if(editingTask){
+        editTask(title,date,priority,desc,editTaskElem,listStorage)
+    }
+    else{
+        editTaskElem=undefined;
+        addTask(title,date,priority,desc,listStorage,selectedIndex);
+    }
     resetInputs(addTaskForm);
+    editingTask=false;
+    editTaskElem=undefined;
     addTaskDialog.close();
 })
 
@@ -60,10 +68,12 @@ function changeSelected(classname,index){
     let currentSelected=document.querySelector('.selected');
     if(currentSelected) currentSelected.classList.remove('selected');
     if(classname=='lists'){
-        document.querySelectorAll('.list')[index].classList.add('selected');
+        let listElem=document.querySelectorAll('.list')[index];
+        createListPage(listElem,listStorage);
+        listElem.classList.add('selected');
     }
     else{
-        document.querySelector('.'+classname).classList.add('selected');
+        document.querySelector('.'+'org'+classname).classList.add('selected');
         selectedIndex=-1;
     } 
     currentTab=classname;
@@ -71,35 +81,36 @@ function changeSelected(classname,index){
 
 document.addEventListener('click',(event)=>{
     let target=event.target;
-    if(target.classList.contains('all') || target.parentNode.classList.contains('all') && currentTab!="all"){
-        changeSelected('all');
+    if(target.classList.contains('orgAll') || target.parentNode.classList.contains('orgAll') && currentTab!="All"){
+        changeSelected('All');
     }
-    else if(target.classList.contains('today') || target.parentNode.classList.contains('today') && currentTab!="today"){
-        changeSelected('today');
+    else if(target.classList.contains('orgToday') || target.parentNode.classList.contains('orgToday') && currentTab!="Today"){
+        changeSelected('Today');
     }
-    else if(target.classList.contains('week') || target.parentNode.classList.contains('week') && currentTab!="week"){
-        changeSelected('week');
+    else if(target.classList.contains('orgWeek') || target.parentNode.classList.contains('orgWeek') && currentTab!="Week"){
+        changeSelected('Week');
     }
-    else if(target.classList.contains('important') || target.parentNode.classList.contains('important') && currentTab!="important"){
-        changeSelected('important');
+    else if(target.classList.contains('orgImportant') || target.parentNode.classList.contains('orgImportant') && currentTab!="Important"){
+        changeSelected('Important');
     }
-    else if(target.classList.contains('completed') || target.parentNode.classList.contains('completed') && currentTab!="completed"){
-        changeSelected('completed');
+    else if(target.classList.contains('orgCompleted') || target.parentNode.classList.contains('orgCompleted') && currentTab!="Completed"){
+        changeSelected('Completed');
     }
     else if(target.classList.contains('addlistbtn')){
         createListDialog.showModal();
     }
-    else if(target.classList.contains('deletebtn')){
-        
-    }
     else if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
         let index;
-        if(target.hasAttribute('data-listnum')) index=target.dataset.listnum;
-        else index=target.parentNode.dataset.listnum;
+        if(!target.hasAttribute('data-list-index')) target=target.parentNode;
+        index=target.dataset.listIndex; 
         if(selectedIndex!=index){
             selectedIndex=index;
+            maindiv=createListPage(target,listStorage);
             changeSelected('lists',index);
         }
+    }
+    else if(target.classList.contains('deletelistbtn')){
+        deleteList(target,listStorage);
     }
     else if(target.classList.contains('more')){
         let morebtn=target;
@@ -123,25 +134,39 @@ document.addEventListener('click',(event)=>{
         lessbtn.classList.toggle('less');
         lessbtn.classList.toggle('more');
     }
-
     else if(target.classList.contains('completion') || target.classList.contains('primary') || target.classList.contains('title') || target.classList.contains('task')){
         if(target.classList.contains('title')) target=target.parentNode;
         if(!target.classList.contains('completion')) target=target.querySelector('.completion');
-        changeCompletion(target,listStorage,selectedIndex);
+        changeCompletion(target,listStorage);
     }
-
     else if(target.classList.contains('priority')){
-        changePriority(target,listStorage,selectedIndex);
+        changePriority(target,listStorage);
+    }
+    else if(target.classList.contains('editTask')){
+        editingTask=true;
+        editTaskElem=target;
+        document.querySelector('#addTask .heading h2').textContent='Edit Task';
+        let taskref=target.parentNode.parentNode.dataset.taskRef;
+        let task=findTask(listStorage[selectedIndex],taskref);
+        addTaskDialog.querySelector('.titleinput').value=task.title;
+        addTaskDialog.querySelector('.dateinput').value=task.date.getFullYear()+'-'+task.date.getMonth()+'-'+task.date.getDate();
+        addTaskDialog.querySelector('.descinput').value=task.description;
+        addTaskDialog.querySelector('.priorityinput').checked=task.priority;
+        addTaskDialog.showModal();
+    }
+    else if(target.classList.contains('deleteTask')){
+        deleteTask(target,listStorage);
     }
 
     else if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
+        document.querySelector('#addTask .heading h2').textContent='Add Task';
         addTaskDialog.showModal();
     }
-
+    //console.log(listStorage);
 })
 
 //STARTUP
-createList("My Tasks",listStorage,lists);
+createList("My Tasks",listStorage);
 changeSelected('lists',0);
 const today = (new Date()).toISOString().split('T')[0];
-document.querySelector('#addTask .date').min=today;
+document.querySelector('#addTask .dateinput').min=today;
