@@ -6,6 +6,7 @@ import editsvg  from "./images/edit.svg";
 import moresvg from "./images/more.svg";
 
 import { format } from 'date-fns';
+import { se } from "date-fns/locale";
 
 export { addTask, findTask, changeCompletion, changePriority };
 
@@ -46,6 +47,7 @@ function addTaskToPage(title,date,priority,taskRef,taskIndex){
     const priorityImg=document.createElement('img');
     if(priority) priorityImg.src=importantsvg;
     else priorityImg.src=unimportantsvg;
+    priorityImg.dataset.status=priority == true ? 1 :0;
     priorityImg.classList.add('priority');
     const editImg=document.createElement('img');
     editImg.src=editsvg;
@@ -94,5 +96,30 @@ function changeCompletionOnPage(completion){
 }
 
 function changePriority(priority,lists,listIndex){
+    changePriorityOnPage(priority);
+    let taskref=priority.parentNode.parentNode.dataset.taskRef;
+    let task=findTask(lists[listIndex],taskref);
+    task.priority=!task.priority;
+}
 
+function changePriorityOnPage(priority){
+    let target=priority.parentNode;
+    priority.classList.add('remove');
+    const newPriority=document.createElement('img');
+    newPriority.classList.add('priority');
+    setTimeout(()=>{
+        if(priority.dataset.status==1){
+
+            target.removeChild(priority);
+            newPriority.src=unimportantsvg;
+            newPriority.dataset.status=0;
+            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-2]);
+        } 
+        else{
+            target.removeChild(priority);
+            newPriority.src=importantsvg;
+            newPriority.dataset.status=1;
+            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-2]);
+        }
+    },100);
 }
