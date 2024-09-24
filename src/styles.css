@@ -379,6 +379,10 @@ dialog button:hover{
     margin-right: auto;
 }
 
+.task .title.completed{
+    text-decoration: line-through;
+}
+
 .task .desc{
     font-family: var(--varela-font);
 }
@@ -393,6 +397,24 @@ dialog button:hover{
 
 .task .less{
     transform: rotate(180deg);
+}
+
+@keyframes Scale {
+    from{
+        transform: scale(0.8);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+
+.completion{
+    animation: Scale 0.1s ease-in-out;
+}
+
+.completion.remove{
+    transform: scale(0.8);
+    transition: all 0.1s ease;
 }
 
 .content .heading img{

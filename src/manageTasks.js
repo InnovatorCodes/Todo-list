@@ -1,4 +1,5 @@
 import incompletesvg from  "./images/incomplete.svg"
+import completesvg from "./images/completed.svg";
 import unimportantsvg from "./images/unimportant.svg";
 import importantsvg from "./images/important.svg";
 import editsvg  from "./images/edit.svg";
@@ -6,7 +7,7 @@ import moresvg from "./images/more.svg";
 
 import { format } from 'date-fns';
 
-export { addTask, findTask };
+export { addTask, findTask, changeCompletion, changePriority };
 
 function addTask(title,date,priority,description,lists,listIndex){
     let task={
@@ -14,6 +15,7 @@ function addTask(title,date,priority,description,lists,listIndex){
         "date": date,
         "priority": priority,
         "description":description,
+        "completion": false
     };
     task.taskRef=lists[listIndex].listTasks.length;
     let taskRef=task.taskRef;
@@ -33,6 +35,8 @@ function addTaskToPage(title,date,priority,taskRef,taskIndex){
     primary.classList.add('primary');
     const completion= document.createElement('img');
     completion.src=incompletesvg;
+    completion.classList.add('completion');
+    completion.dataset.status=0;
     const taskTitle=document.createElement('div');
     taskTitle.textContent=title;
     taskTitle.classList.add('title')
@@ -56,5 +60,39 @@ function addTaskToPage(title,date,priority,taskRef,taskIndex){
 }
 
 function findTask(list,taskref){
-    return list.listTasks.filter((task)=>taskref==task.taskRef)
+    return (list.listTasks.filter((task)=>taskref==task.taskRef))[0];
+}
+
+function changeCompletion(completion,lists,listIndex){
+    changeCompletionOnPage(completion);
+    let taskref=completion.parentNode.parentNode.dataset.taskRef;
+    let task=findTask(lists[listIndex],taskref);
+    task.completion=!task.completion;
+    //console.log(task);
+}
+
+function changeCompletionOnPage(completion){
+    let target=completion.parentNode;
+    completion.classList.add('remove');
+    const newCompletion=document.createElement('img');
+    newCompletion.classList.add('completion');
+    target.querySelector('.title').classList.toggle('completed');
+    setTimeout(()=>{
+        if(completion.dataset.status==1){
+            target.removeChild(completion);
+            newCompletion.src=incompletesvg;
+            newCompletion.dataset.status=0;
+            target.insertBefore(newCompletion,target.childNodes[0]);
+        } 
+        else{
+            target.removeChild(completion);
+            newCompletion.src=completesvg;
+            newCompletion.dataset.status=1;
+            target.insertBefore(newCompletion,target.childNodes[0]);
+        }
+    },100);
+}
+
+function changePriority(priority,lists,listIndex){
+
 }

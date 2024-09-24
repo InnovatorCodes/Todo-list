@@ -1,7 +1,7 @@
 import "./styles.css";
 import displayAllTasks from "./all-tasks";
 import { createList } from "./manageLists";
-import { addTask, findTask } from "./manageTasks";
+import { addTask, findTask, changeCompletion, changePriority } from "./manageTasks";
 
 let currentTab='mytasks', selectedIndex=0;
 const listStorage=[];
@@ -56,7 +56,6 @@ addTaskForm.addEventListener('submit',(event)=>{
     addTaskDialog.close();
 })
 
-
 function changeSelected(classname,index){
     let currentSelected=document.querySelector('.selected');
     if(currentSelected) currentSelected.classList.remove('selected');
@@ -75,25 +74,25 @@ document.addEventListener('click',(event)=>{
     if(target.classList.contains('all') || target.parentNode.classList.contains('all') && currentTab!="all"){
         changeSelected('all');
     }
-    if(target.classList.contains('today') || target.parentNode.classList.contains('today') && currentTab!="today"){
+    else if(target.classList.contains('today') || target.parentNode.classList.contains('today') && currentTab!="today"){
         changeSelected('today');
     }
-    if(target.classList.contains('week') || target.parentNode.classList.contains('week') && currentTab!="week"){
+    else if(target.classList.contains('week') || target.parentNode.classList.contains('week') && currentTab!="week"){
         changeSelected('week');
     }
-    if(target.classList.contains('important') || target.parentNode.classList.contains('important') && currentTab!="important"){
+    else if(target.classList.contains('important') || target.parentNode.classList.contains('important') && currentTab!="important"){
         changeSelected('important');
     }
-    if(target.classList.contains('completed') || target.parentNode.classList.contains('completed') && currentTab!="completed"){
+    else if(target.classList.contains('completed') || target.parentNode.classList.contains('completed') && currentTab!="completed"){
         changeSelected('completed');
     }
-    if(target.classList.contains('addlistbtn')){
+    else if(target.classList.contains('addlistbtn')){
         createListDialog.showModal();
     }
-    if(target.classList.contains('deletebtn')){
+    else if(target.classList.contains('deletebtn')){
         
     }
-    if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
+    else if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
         let index;
         if(target.hasAttribute('data-listnum')) index=target.dataset.listnum;
         else index=target.parentNode.dataset.listnum;
@@ -102,11 +101,11 @@ document.addEventListener('click',(event)=>{
             changeSelected('lists',index);
         }
     }
-    if(target.classList.contains('more')){
+    else if(target.classList.contains('more')){
         let morebtn=target;
         target=target.parentNode.parentNode;
         let taskref=target.dataset.taskRef;
-        let desc=findTask(listStorage[selectedIndex],taskref)[0].description;
+        let desc=findTask(listStorage[selectedIndex],taskref).description;
         if(desc!=''){
             morebtn.classList.toggle('more');
             morebtn.classList.toggle('less');
@@ -116,7 +115,7 @@ document.addEventListener('click',(event)=>{
             target.appendChild(descDiv);
         }
     }
-    if(target.classList.contains('less')){
+    else if(target.classList.contains('less')){
         let lessbtn=target;
         target=target.parentNode.parentNode;
         const descDiv=target.querySelector('.desc');
@@ -125,7 +124,17 @@ document.addEventListener('click',(event)=>{
         lessbtn.classList.toggle('more');
     }
 
-    if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
+    else if(target.classList.contains('completion') || target.classList.contains('primary') || target.classList.contains('title') || target.classList.contains('task')){
+        if(target.classList.contains('title')) target=target.parentNode;
+        if(!target.classList.contains('completion')) target=target.querySelector('.completion');
+        changeCompletion(target,listStorage,selectedIndex);
+    }
+
+    else if(target.classList.contains('priority')){
+        changePriority(target,listStorage,selectedIndex);
+    }
+
+    else if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
         addTaskDialog.showModal();
     }
 
