@@ -72,7 +72,7 @@ function addTaskToPage(title,date,priority,completionStatus,taskRef,taskIndex,li
 }
 
 function findTask(list,taskref){
-    //console.log(list);
+    console.log(list);
     return (list.listTasks.filter((task)=>taskref==task.taskRef))[0];
 }
 

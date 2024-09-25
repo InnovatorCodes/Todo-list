@@ -1,12 +1,13 @@
 import "./styles.css";
 import displayAllTasks from "./all-tasks";
-import { createList,deleteList, createListPage } from "./manageLists";
+import { createList,deleteList, createListPage, findList } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 import { createOrganisePage } from "./organiseTasks";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let maindiv;
 const listStorage=[];
+let noteStorage=[];
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
@@ -14,9 +15,10 @@ function resetInputs(form){
     })
     let textarea=form.querySelector('textarea');
     if(textarea) textarea.value='';
+    let checkbox=form.querySelector('input[type=checkbox]')
+    if(checkbox) checkbox.checked=false;
 }
 
-const content=document.querySelector('.content');
 const createListDialog = document.querySelector('dialog#createlist');
 const addTaskDialog =document.querySelector('dialog#addTask');
 const createListForm=document.querySelector('#createlist form');
@@ -153,8 +155,10 @@ document.addEventListener('click',(event)=>{
         editingTask=true;
         editTaskElem=target;
         document.querySelector('#addTask .heading h2').textContent='Edit Task';
+        document.querySelector('#addTask button').textContent='Confirm';
         let taskref=target.parentNode.parentNode.dataset.taskRef;
-        let task=findTask(listStorage[selectedListRef],taskref);
+        let listRef=target.parentNode.parentNode.dataset.listRef;
+        let task=findTask(findList(listStorage,listRef),taskref);
         addTaskDialog.querySelector('.titleinput').value=task.title;
         addTaskDialog.querySelector('.dateinput').value=task.date.getFullYear()+'-'+task.date.getMonth()+'-'+task.date.getDate();
         addTaskDialog.querySelector('.descinput').value=task.description;
@@ -167,6 +171,7 @@ document.addEventListener('click',(event)=>{
 
     else if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
         document.querySelector('#addTask .heading h2').textContent='Add Task';
+        document.querySelector('#addTask button').textContent='Add Task';
         addTaskDialog.showModal();
     }
     //console.log(target);

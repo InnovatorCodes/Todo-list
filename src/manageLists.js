@@ -34,7 +34,7 @@ function createList(title,lists){
 }
 
 function findList(lists,listref){
-    //console.log(lists,listref);
+    console.log(lists,listref);
     return (lists.filter((list)=>listref==list.listRef))[0];
 }
 function deleteList(deleteListElem,lists){
@@ -74,9 +74,10 @@ function createListPage(listElem,lists,prevmaindiv){
     const addtasktext=document.createElement('div');
     addtasktext.textContent="Add Task";
     addTaskBtn.append(addTaskImg,addtasktext);
+    const hr=document.createElement('hr');
     const tasks=document.createElement('div');
     tasks.classList.add('tasks');
-    maindiv.append(heading,addTaskBtn,tasks);
+    maindiv.append(heading,addTaskBtn,hr,tasks);
     if(prevmaindiv) document.querySelector('.content').removeChild(prevmaindiv);
     document.querySelector('.content').appendChild(maindiv);
     list.listTasks.forEach((task,taskIndex)=>{

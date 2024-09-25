@@ -311,7 +311,7 @@ dialog button:hover{
 }
 
 .addTaskbtn:hover{
-    background-color: var(--selectedTabBGColor);
+    background-color: var(--sidebarBGColor);
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
@@ -400,6 +400,7 @@ hr{
 
 .task .desc{
     font-family: var(--varela-font);
+    font-size: 1.15rem;
 }
 
 .task .priority, .edit{
@@ -451,4 +452,95 @@ hr{
 
 .notes{
     background-color:  var(--notesBGColor);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1rem;
+    gap: 5px;
+    min-width: 330px;
+}
+
+.notes .heading{
+    display: flex;
+    gap: 15px;
+    font-family: var(--raleway-font);
+    color: white;
+    font-size: 2.7rem;
+    font-weight: 500;
+}
+
+.notes .addnotebtn{
+    font-family: var(--varela-font);
+    font-size: 2rem;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 8px;
+    padding: 0.5rem 0.5rem;
+    margin-bottom: 0.2rem;
+    padding-left:auto;
+    font-family: var(--varela-font);
+    font-size: 1.3rem;
+    color: white;
+}
+
+.notes .addnotebtn:hover{
+    background-color: var(--contentBGColor);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.notes .addnotebtn img{
+    width: 2rem;
+}
+
+.notes .heading img{
+    width: 3.7rem;
+}
+
+.notesDiv{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.note{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border: 2px solid white;
+    border-radius: 16px;
+    gap: 10px;
+}
+
+.note .title{
+    font-size: 1.5rem;
+}
+
+.note .desc{
+    font-size: 1.15rem;
+}
+
+.note .title, .note .desc{
+    width: 100%;
+    color: white;
+    font-family: var(--varela-font);
+}
+
+.note .options{
+    display: flex;
+    gap: 5px;
+    align-self: flex-end;
+}
+
+.options img{
+    width: 2rem;
+}
+
+.options img:hover{
+    cursor: pointer;
 }

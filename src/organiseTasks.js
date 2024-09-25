@@ -84,7 +84,6 @@ function allFilterFn(task){
 
 function  todayFilterFn(task){
     let today=(new Date()).toISOString().split('T')[0];
-    //console.log(today,task.date.toISOString().split('T')[0])
     if(today==task.date.toISOString().split('T')[0]){
         let newtask=task;
         newtask.listRef=globalList.listRef;
