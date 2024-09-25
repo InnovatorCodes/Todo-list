@@ -2,6 +2,7 @@ import "./styles.css";
 import displayAllTasks from "./all-tasks";
 import { createList,deleteList, createListPage } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
+import { createAllPage } from "./organiseTasks";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let maindiv;
@@ -73,6 +74,14 @@ function changeSelected(classname,listElem){
         listElem.classList.add('selected');
     }
     else{
+        switch (classname) {
+            case 'All':
+                maindiv=createAllPage(listStorage,maindiv);
+                break;
+        
+            default:
+                break;
+        }
         document.querySelector('.'+'org'+classname).classList.add('selected');
         selectedListRef=-1;
     } 
@@ -81,6 +90,7 @@ function changeSelected(classname,listElem){
 
 document.addEventListener('click',(event)=>{
     let target=event.target;
+    //console.log(listStorage[0].listTasks);
     if(target.classList.contains('orgAll') || target.parentNode.classList.contains('orgAll') && currentTab!="All"){
         changeSelected('All');
     }

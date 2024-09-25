@@ -11,7 +11,8 @@ let listRef=0;
 function createList(title,lists){
     let list = {
         listTitle: title,
-        listTasks: []
+        listTasks: [],
+        taskRefCounter:0
     }
     lists.push(list);
     const newlist=document.createElement('div');
@@ -33,6 +34,7 @@ function createList(title,lists){
 }
 
 function findList(lists,listref){
+    //console.log(lists,listref);
     return (lists.filter((list)=>listref==list.listRef))[0];
 }
 function deleteList(deleteListElem,lists){
@@ -78,7 +80,7 @@ function createListPage(listElem,lists,prevmaindiv){
     if(prevmaindiv) document.querySelector('.content').removeChild(prevmaindiv);
     document.querySelector('.content').appendChild(maindiv);
     list.listTasks.forEach((task,taskIndex)=>{
-        addTaskToPage(task.title,task.date,task.priority,task.taskRef,taskIndex,listRef);
+        addTaskToPage(task.title,task.date,task.priority,task.completion,task.taskRef,taskIndex,listRef);
     })
     return maindiv;
 }
