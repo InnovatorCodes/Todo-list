@@ -3,7 +3,7 @@ import displayAllTasks from "./all-tasks";
 import { createList,deleteList, createListPage } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 
-let currentTab='mytasks', selectedIndex=0, editingTask=false, editTaskElem;
+let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let maindiv;
 const listStorage=[];
 
@@ -55,8 +55,7 @@ addTaskForm.addEventListener('submit',(event)=>{
         editTask(title,date,priority,desc,editTaskElem,listStorage)
     }
     else{
-        editTaskElem=undefined;
-        addTask(title,date,priority,desc,listStorage,selectedIndex);
+        addTask(title,date,priority,desc,listStorage,selectedListRef);
     }
     resetInputs(addTaskForm);
     editingTask=false;
@@ -64,17 +63,18 @@ addTaskForm.addEventListener('submit',(event)=>{
     addTaskDialog.close();
 })
 
-function changeSelected(classname,index){
+function changeSelected(classname,listElem){
     let currentSelected=document.querySelector('.selected');
     if(currentSelected) currentSelected.classList.remove('selected');
     if(classname=='lists'){
-        let listElem=document.querySelectorAll('.list')[index];
-        createListPage(listElem,listStorage);
+        //console.log(listElem);
+        selectedListRef=listElem.dataset.listRef;
+        maindiv=createListPage(listElem,listStorage,maindiv);
         listElem.classList.add('selected');
     }
     else{
         document.querySelector('.'+'org'+classname).classList.add('selected');
-        selectedIndex=-1;
+        selectedListRef=-1;
     } 
     currentTab=classname;
 }
@@ -99,24 +99,28 @@ document.addEventListener('click',(event)=>{
     else if(target.classList.contains('addlistbtn')){
         createListDialog.showModal();
     }
-    else if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
-        let index;
-        if(!target.hasAttribute('data-list-index')) target=target.parentNode;
-        index=target.dataset.listIndex; 
-        if(selectedIndex!=index){
-            selectedIndex=index;
-            maindiv=createListPage(target,listStorage);
-            changeSelected('lists',index);
+    else if(target.classList.contains('deletelistbtn')){
+        //console.log('hi')
+        let listRef=target.parentNode.dataset.listRef;
+        let status=deleteList(target,listStorage);
+        if(listRef==selectedListRef && status==true){
+            changeSelected('lists',document.querySelectorAll('.list')[0]);
         }
     }
-    else if(target.classList.contains('deletelistbtn')){
-        deleteList(target,listStorage);
+    else if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
+        let listRef;
+        if(!target.hasAttribute('data-list-ref')) target=target.parentNode;
+        listRef=target.dataset.listRef;
+        if(selectedListRef!=listRef){
+            selectedListRef=listRef;
+            changeSelected('lists',target);
+        }
     }
     else if(target.classList.contains('more')){
         let morebtn=target;
         target=target.parentNode.parentNode;
         let taskref=target.dataset.taskRef;
-        let desc=findTask(listStorage[selectedIndex],taskref).description;
+        let desc=findTask(listStorage[selectedListRef],taskref).description;
         if(desc!=''){
             morebtn.classList.toggle('more');
             morebtn.classList.toggle('less');
@@ -147,7 +151,7 @@ document.addEventListener('click',(event)=>{
         editTaskElem=target;
         document.querySelector('#addTask .heading h2').textContent='Edit Task';
         let taskref=target.parentNode.parentNode.dataset.taskRef;
-        let task=findTask(listStorage[selectedIndex],taskref);
+        let task=findTask(listStorage[selectedListRef],taskref);
         addTaskDialog.querySelector('.titleinput').value=task.title;
         addTaskDialog.querySelector('.dateinput').value=task.date.getFullYear()+'-'+task.date.getMonth()+'-'+task.date.getDate();
         addTaskDialog.querySelector('.descinput').value=task.description;
@@ -162,11 +166,12 @@ document.addEventListener('click',(event)=>{
         document.querySelector('#addTask .heading h2').textContent='Add Task';
         addTaskDialog.showModal();
     }
+    //console.log(target);
     //console.log(listStorage);
 })
 
 //STARTUP
 createList("My Tasks",listStorage);
-changeSelected('lists',0);
+changeSelected('lists',document.querySelectorAll('.list')[0]);
 const today = (new Date()).toISOString().split('T')[0];
 document.querySelector('#addTask .dateinput').min=today;

@@ -7,11 +7,11 @@ import deletesvg from "./images/delete.svg";
 import moresvg from "./images/more.svg";
 
 import { format } from 'date-fns';
-import { se } from "date-fns/locale";
+import { findList } from "./manageLists";
 
 export { addTask, editTask, findTask, deleteTask, changeCompletion, changePriority, addTaskToPage };
 
-function addTask(title,date,priority,description,lists,listIndex){
+function addTask(title,date,priority,description,lists,listRef){
     let task={
         "title": title,
         "date": date,
@@ -19,22 +19,22 @@ function addTask(title,date,priority,description,lists,listIndex){
         "description":description,
         "completion": false
     };
-    task.taskRef=lists[listIndex].listTasks.length;
+    task.taskRef=findList(lists,listRef).listTasks.length;
     let taskRef=task.taskRef;
-    lists[listIndex].listTasks.push(task);
-    lists[listIndex].listTasks.sort(function(task1,task2){
+    findList(lists,listRef).listTasks.push(task);
+    findList(lists,listRef).listTasks.sort(function(task1,task2){
         return task1.date-task2.date;
     })
-    let taskIndex=lists[listIndex].listTasks.indexOf(task);
-    addTaskToPage(title,date,priority,taskRef,taskIndex,listIndex);
-    //console.log(arguments)
+    let taskIndex=findList(lists,listRef).listTasks.indexOf(task);
+    addTaskToPage(title,date,priority,taskRef,taskIndex,listRef);
+    //console.log(listIndex)
 }
 
-function addTaskToPage(title,date,priority,taskRef,taskIndex,listIndex){
+function addTaskToPage(title,date,priority,taskRef,taskIndex,listRef){
     const newtask=document.createElement('div');
     newtask.classList.add('task');
     newtask.dataset.taskRef=taskRef;
-    newtask.dataset.listIndex=listIndex;
+    newtask.dataset.listRef=listRef;
     const primary=document.createElement('primary');
     primary.classList.add('primary');
     const completion= document.createElement('img');
@@ -75,8 +75,8 @@ function findTask(list,taskref){
 function changeCompletion(completion,lists){
     changeCompletionOnPage(completion);
     let taskref=completion.parentNode.parentNode.dataset.taskRef;
-    let listIndex=completion.parentNode.parentNode.dataset.listIndex;
-    let task=findTask(lists[listIndex],taskref);
+    let listRef=completion.parentNode.parentNode.dataset.listRef;
+    let task=findTask(findList(lists,listRef),taskref);
     task.completion=!task.completion;
     //console.log(completion,taskref,listIndex);
 }
@@ -106,8 +106,8 @@ function changeCompletionOnPage(completion){
 function changePriority(priority,lists){
     changePriorityOnPage(priority);
     let taskref=priority.parentNode.parentNode.dataset.taskRef;
-    let listIndex=priority.parentNode.parentNode.dataset.listIndex;
-    let task=findTask(lists[listIndex],taskref);
+    let listRef=priority.parentNode.parentNode.dataset.listRef;
+    let task=findTask(findList(lists,listRef),taskref);
     task.priority=!task.priority;
 }
 
@@ -121,21 +121,21 @@ function changePriorityOnPage(priority){
             target.removeChild(priority);
             newPriority.src=unimportantsvg;
             newPriority.dataset.status=0;
-            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-2]);
+            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-3]);
         } 
         else{
             target.removeChild(priority);
             newPriority.src=importantsvg;
             newPriority.dataset.status=1;
-            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-2]);
+            target.insertBefore(newPriority,target.childNodes[target.childNodes.length-3]);
         }
     },100);
 }
 
 function editTask(title,date,priority,description,editTaskElem,lists){
-    let listIndex=editTaskElem.parentNode.parentNode.dataset.listIndex;
-    let taskref=editTaskElem.parentNode.parentNode.dataset.listIndex;
-    let task=findTask(lists[listIndex],taskref);
+    let listRef=editTaskElem.parentNode.parentNode.dataset.listRef;
+    let taskref=editTaskElem.parentNode.parentNode.dataset.taskRef;
+    let task=findTask(findList(lists,listRef),taskref);
     task.title=title;
     task.date=date;
     task.priority=priority;
@@ -154,11 +154,11 @@ function editTaskOnPage(title,date,priority,editTaskElem){
 
 function deleteTask(deleteElem,lists){
     let taskref=deleteElem.parentNode.parentNode.dataset.taskRef;
-    let listIndex=deleteElem.parentNode.parentNode.dataset.listIndex;
-    let taskIndex=lists[listIndex].listTasks.indexOf(findTask(lists[listIndex],taskref));
-    lists[listIndex].listTasks.splice(taskIndex,1);
+    let listRef=deleteElem.parentNode.parentNode.dataset.listRef;
+    //console.log(lists[listIndex],listIndex);
+    let taskIndex=findList(lists,listRef).listTasks.indexOf(findTask(findList(lists,listRef),taskref));
+    findList(lists,listRef).listTasks.splice(taskIndex,1);
     deleteTaskfromPage(deleteElem);
-    //console.log(lists[listIndex]);
 }
 
 function deleteTaskfromPage(deleteElem){

@@ -445,7 +445,7 @@ hr{
     }
 }
 
-.task.fadeOut{
+.task.fadeOut, .list.fadeOut{
     animation: fadeout 0.2s ease-in-out forwards;
 }
 
