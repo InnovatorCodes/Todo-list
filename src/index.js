@@ -2,7 +2,7 @@ import "./styles.css";
 import displayAllTasks from "./all-tasks";
 import { createList,deleteList, createListPage } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
-import { createAllPage, createTodayPage, createWeekPage } from "./organiseTasks";
+import { createOrganisePage } from "./organiseTasks";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let maindiv;
@@ -74,19 +74,7 @@ function changeSelected(classname,listElem){
         listElem.classList.add('selected');
     }
     else{
-        switch (classname) {
-            case 'All':
-                maindiv=createAllPage(listStorage,maindiv);
-                break;
-            case 'Today':
-                maindiv=createTodayPage(listStorage,maindiv);
-                break;
-            case 'Week':
-                maindiv=createWeekPage(listStorage,maindiv);
-                break;
-            default:
-                break;
-        }
+        maindiv=createOrganisePage(listStorage,maindiv,classname);
         document.querySelector('.'+'org'+classname).classList.add('selected');
         selectedListRef=-1;
     } 
