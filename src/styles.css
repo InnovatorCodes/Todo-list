@@ -20,6 +20,10 @@
     --formButtonColor:#28c2a0;
 }
 
+body{
+    background-color: #1E2A38;
+}
+
 *:not(dialog){
     box-sizing: border-box;
     margin: 0;
@@ -595,4 +599,22 @@ hr{
     height: 100vh;
     width: 100vw;
     background-color: white;
+}
+
+.footer{
+    color: white;
+    height: 2rem; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--varela-font);
+}
+
+.footer a{
+    color: white; 
+}
+
+.footer img{
+    width: 1.5rem;
 }

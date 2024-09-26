@@ -210,7 +210,7 @@ document.addEventListener('click',(event)=>{
         let listRef=target.parentNode.parentNode.dataset.listRef;
         let task=findTask(findList(listStorage,listRef),taskref);
         addTaskDialog.querySelector('.titleinput').value=task.title;
-        addTaskDialog.querySelector('.dateinput').value=task.date.getFullYear()+'-'+task.date.getMonth()+'-'+task.date.getDate();
+        addTaskDialog.querySelector('.dateinput').valueAsDate=task.date;
         addTaskDialog.querySelector('.descinput').value=task.description;
         addTaskDialog.querySelector('.priorityinput').checked=task.priority;
         addTaskDialog.showModal();
