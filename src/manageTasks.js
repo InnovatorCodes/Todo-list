@@ -32,7 +32,7 @@ function addTask(title,date,priority,description,lists,listRef){
 }
 
 function addTaskToPage(title,date,priority,completionStatus,taskRef,taskIndex,listRef){
-    console.log(arguments);
+    //console.log(arguments);
     const newtask=document.createElement('div');
     newtask.classList.add('task');
     newtask.dataset.taskRef=taskRef;
@@ -150,10 +150,10 @@ function editTask(title,date,priority,description,editTaskDiv,lists){
     task.date=date;
     task.priority=priority;
     task.description=description;
-    editTaskOnPage(title,date,priority,editTaskDiv);
+    editTaskOnPage(title,date,priority,description,editTaskDiv);
 }
 
-function editTaskOnPage(title,date,priority,editTaskDiv){
+function editTaskOnPage(title,date,priority,description,editTaskDiv){
     editTaskDiv.querySelector('.title').textContent=title;
     editTaskDiv.querySelector('.date').textContent=format(date,'dd/MM/yyyy');
     let priorityelem=editTaskDiv.querySelector('.priority');
@@ -165,6 +165,7 @@ function editTaskOnPage(title,date,priority,editTaskDiv){
         priorityelem.src=unimportantsvg;
         priorityelem.dataset.status=0;
     } 
+    if(editTaskDiv.querySelector('.desc')) editTaskDiv.querySelector('.desc').textContent=description;
 }
 
 function deleteTask(deleteElem,lists){

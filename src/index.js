@@ -180,14 +180,19 @@ document.addEventListener('click',(event)=>{
             const descDiv=document.createElement('div');
             descDiv.textContent=desc;
             descDiv.classList.add('desc');
-            target.appendChild(descDiv);
+            const listName=document.createElement('div');
+            listName.classList.add('listname');
+            listName.textContent='List: '+findList(listStorage,listRef).listTitle;
+            target.append(descDiv,listName);
         }
     }
     else if(target.classList.contains('less')){
         let lessbtn=target;
         target=target.parentNode.parentNode;
         const descDiv=target.querySelector('.desc');
+        const listname=target.querySelector('.listname');
         target.removeChild(descDiv);
+        target.removeChild(listname);
         lessbtn.classList.toggle('less');
         lessbtn.classList.toggle('more');
     }

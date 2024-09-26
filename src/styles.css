@@ -160,6 +160,7 @@ body{
 .list .deletelistbtn, .list .editlistbtn{
     display: none;
     opacity: 0;
+    width: 1.9rem;
 }
 
 .list .editlistbtn{
@@ -423,6 +424,10 @@ hr{
     font-size: 1.5rem;
     color: white;
     margin-right: auto;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .task .title.completed{
@@ -430,8 +435,17 @@ hr{
 }
 
 .task .desc{
+    word-break: break-all;
+}
+.task .desc, .task .listname{
     font-family: var(--varela-font);
     font-size: 1.15rem;
+    align-self: flex-start;
+}
+
+.task .listname{
+    color: white;
+    max-width: 100%;
 }
 
 .task .priority, .edit{
