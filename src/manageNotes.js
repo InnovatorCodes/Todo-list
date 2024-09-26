@@ -1,7 +1,7 @@
 import editsvg from "./images/edit.svg";
 import deletesvg from "./images/delete.svg";
 
-export {newNote, findNote, editNote, deleteNote};
+export {newNote, findNote, editNote, deleteNote, addNoteToPage};
 
 let noteRefCounter=0
 

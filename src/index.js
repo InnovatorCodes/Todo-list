@@ -2,7 +2,7 @@ import "./styles.css";
 import { createList,deleteList, createListPage, findList, addListToPage, setlistRefCount, editList } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 import { createOrganisePage } from "./organiseTasks";
-import { findNote, newNote, editNote, deleteNote } from "./manageNotes";
+import { findNote, newNote, editNote, deleteNote, addNoteToPage } from "./manageNotes";
 import { storeData,retrieveData } from "./manageLocalStorage";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
@@ -12,7 +12,7 @@ let maindiv;
 const listStorage=retrieveData('list');
 const noteStorage=retrieveData('note');
 
-//console.log(listStorage);
+console.log(noteStorage);
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
@@ -262,6 +262,11 @@ if(listStorage.length==0){
 else{
     setlistRefCount(listStorage.length-1,listStorage[0].listRef);
     listStorage.forEach((list)=>addListToPage(list));
+}
+if(noteStorage.length){
+    noteStorage.forEach((note)=>{
+        addNoteToPage(note);
+    })
 }
 //console.log(listStorage.length);
 //console.log(document.querySelector('.list'));

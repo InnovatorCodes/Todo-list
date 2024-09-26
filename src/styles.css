@@ -446,6 +446,9 @@ hr{
 .task .listname{
     color: white;
     max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .task .priority, .edit{
@@ -561,6 +564,7 @@ hr{
     border: 2px solid white;
     border-radius: 16px;
     gap: 10px;
+    max-width: 100%;
 }
 
 .note .noteTitle{
@@ -574,6 +578,8 @@ hr{
 .note .noteTitle, .note .noteDesc{
     width: 100%;
     color: white;
+    max-width: 100%;
+    word-break: break-all;
     font-family: var(--varela-font);
 }
 
