@@ -12,7 +12,7 @@ let maindiv;
 const listStorage=retrieveData('list');
 const noteStorage=retrieveData('note');
 
-console.log(noteStorage);
+//console.log(noteStorage);
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
