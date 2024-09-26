@@ -1,14 +1,17 @@
 import editsvg from "./images/edit.svg";
-import deletesvg from "./images/deletesvg";
+import deletesvg from "./images/delete.svg";
+
+export {newNote, findNote, editNote, deleteNote};
 
 let noteRefCounter=0
 
-function createNote(title,description,notes){
+function newNote(title,description,notes){
     let note={
         noteTitle: title,
         noteDescription: description,
-        noteRef: noteRefCounter
     }
+    note.noteRef=noteRefCounter;
+    noteRefCounter++;
     notes.push(note);
     addNoteToPage(note);
 }
@@ -18,11 +21,11 @@ function addNoteToPage(note){
     noteDiv.classList.add('note');
     noteDiv.dataset.noteRef=note.noteRef;
     const title=document.createElement('div');
-    title.classList.add('title');
-    title.textContent=note.title;
+    title.classList.add('noteTitle');
+    title.textContent=note.noteTitle;
     const desc=document.createElement('div');
-    desc.classList.add('desc');
-    desc.textContent=note.description;
+    desc.classList.add('noteDesc');
+    desc.textContent=note.noteDescription;
     const options=document.createElement('div');
     options.classList.add('options');
     const edit=document.createElement('img');
@@ -32,7 +35,40 @@ function addNoteToPage(note){
     deleteImg.classList.add('deleteNote');
     deleteImg.src=deletesvg;
     options.append(edit,deleteImg);
+    noteDiv.append(title,desc,options);
+    document.querySelector('.notesDiv').appendChild(noteDiv);
+}
 
+function findNote(notes,noteRef){
+    return (notes.filter((note)=>noteRef==note.noteRef))[0];
+}
+
+function editNote(title,description,editNoteElem,notes){
+    let noteRef=editNoteElem.dataset.noteRef;
+    let note=findNote(notes,noteRef);
+    note.noteTitle=title;
+    note.noteDescription=description;
+    editNoteOnPage(title,description,editNoteElem);
+    //console.log(notes)
+}
+
+function editNoteOnPage(title,description,editNoteElem){
+    editNoteElem.querySelector('.noteTitle').textContent=title;
+    editNoteElem.querySelector('.noteDesc').textContent=description;
+}
+
+function deleteNote(deleteNoteDiv,notes){
+    let noteRef=deleteNoteDiv.dataset.noteRef;
+    let noteIndex=notes.indexOf(findNote(notes,noteRef));
+    notes.splice(noteIndex,1);
+    deleteNoteFromPage(deleteNoteDiv);
+}
+
+function deleteNoteFromPage(deleteNoteDiv){
+    deleteNoteDiv.classList.add('fadeOut');
+    setTimeout(()=>{
+        document.querySelector('.notesDiv').removeChild(deleteNoteDiv);
+    },300);
 }
 
 /*<div class="note">

@@ -3,8 +3,10 @@ import displayAllTasks from "./all-tasks";
 import { createList,deleteList, createListPage, findList } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 import { createOrganisePage } from "./organiseTasks";
+import { findNote, newNote, editNote, deleteNote } from "./manageNotes";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
+let editingNote=false, editNoteElem;
 let maindiv;
 const listStorage=[];
 let noteStorage=[];
@@ -21,8 +23,10 @@ function resetInputs(form){
 
 const createListDialog = document.querySelector('dialog#createlist');
 const addTaskDialog =document.querySelector('dialog#addTask');
+const newNoteDialog=document.querySelector('dialog#newNote');
 const createListForm=document.querySelector('#createlist form');
 const addTaskForm= document.querySelector('#addTask form');
+const newNoteForm= document.querySelector('#newNote form');
 const cancelbtns=document.querySelectorAll('dialog .cancelbtn');
 
 cancelbtns.forEach((btn)=>{
@@ -64,6 +68,24 @@ addTaskForm.addEventListener('submit',(event)=>{
     editingTask=false;
     editTaskElem=undefined;
     addTaskDialog.close();
+})
+
+newNoteDialog.addEventListener('cancel',(event)=>{
+    event.preventDefault();
+    resetInputs(newNoteForm);
+    newNoteDialog.close();
+})
+
+newNoteForm.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    let title=document.querySelector('#newNote .titleinput').value;
+    let desc=document.querySelector('#newNote .descinput').value;
+    if(editingNote) editNote(title,desc,editNoteElem,noteStorage);
+    else newNote(title,desc,noteStorage);
+    resetInputs(newNoteForm);
+    newNoteDialog.close();
+    editingNote=false;
+    editNoteElem=undefined;
 })
 
 function changeSelected(classname,listElem){
@@ -125,7 +147,8 @@ document.addEventListener('click',(event)=>{
         let morebtn=target;
         target=target.parentNode.parentNode;
         let taskref=target.dataset.taskRef;
-        let desc=findTask(listStorage[selectedListRef],taskref).description;
+        let listRef=target.dataset.listRef;
+        let desc=findTask(findList(listStorage,listRef),taskref).description;
         if(desc!=''){
             morebtn.classList.toggle('more');
             morebtn.classList.toggle('less');
@@ -153,7 +176,7 @@ document.addEventListener('click',(event)=>{
     }
     else if(target.classList.contains('editTask')){
         editingTask=true;
-        editTaskElem=target;
+        editTaskElem=target.parentNode.parentNode;
         document.querySelector('#addTask .heading h2').textContent='Edit Task';
         document.querySelector('#addTask button').textContent='Confirm';
         let taskref=target.parentNode.parentNode.dataset.taskRef;
@@ -168,11 +191,30 @@ document.addEventListener('click',(event)=>{
     else if(target.classList.contains('deleteTask')){
         deleteTask(target,listStorage);
     }
-
     else if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
         document.querySelector('#addTask .heading h2').textContent='Add Task';
         document.querySelector('#addTask button').textContent='Add Task';
         addTaskDialog.showModal();
+    }
+    else if(target.classList.contains('addnotebtn') || target.classList.contains('addnotebtn')){
+        document.querySelector('#newNote .heading h2').textContent='New Note';
+        document.querySelector('#newNote button').textContent='Add Note';
+        newNoteDialog.showModal();
+    }
+    else if(target.classList.contains('editNote')){
+        editingNote=true;
+        editNoteElem=target.parentNode.parentNode;
+        document.querySelector('#newNote .heading h2').textContent='Edit Note';
+        document.querySelector('#newNote button').textContent='Confirm';
+        let noteRef=editNoteElem.dataset.noteRef;
+        let note=findNote(noteStorage,noteRef);
+        newNoteDialog.querySelector('.titleinput').value=note.noteTitle;
+        newNoteDialog.querySelector('.descinput').value=note.noteDescription;
+        newNoteDialog.showModal();
+    }
+    else if(target.classList.contains('deleteNote')){
+        let deleteNoteDiv=target.parentNode.parentNode;
+        deleteNote(deleteNoteDiv,noteStorage);
     }
     //console.log(target);
     //console.log(listStorage);

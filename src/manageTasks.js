@@ -141,24 +141,29 @@ function changePriorityOnPage(priority){
     },100);
 }
 
-function editTask(title,date,priority,description,editTaskElem,lists){
-    let listRef=editTaskElem.parentNode.parentNode.dataset.listRef;
-    let taskref=editTaskElem.parentNode.parentNode.dataset.taskRef;
+function editTask(title,date,priority,description,editTaskDiv,lists){
+    let listRef=editTaskDiv.dataset.listRef;
+    let taskref=editTaskDiv.dataset.taskRef;
     let task=findTask(findList(lists,listRef),taskref);
     task.title=title;
     task.date=date;
     task.priority=priority;
     task.description=description;
-    editTaskOnPage(title,date,priority,editTaskElem);
+    editTaskOnPage(title,date,priority,editTaskDiv);
 }
 
-function editTaskOnPage(title,date,priority,editTaskElem){
-    let primary=editTaskElem.parentNode;
-    primary.querySelector('.title').textContent=title;
-    primary.querySelector('.date').textContent=format(date,'dd/MM/yyyy');
-    let priorityelem=primary.querySelector('.priority');
-    if(priority) priorityelem.src=importantsvg;
-    else priorityelem.src=unimportantsvg;
+function editTaskOnPage(title,date,priority,editTaskDiv){
+    editTaskDiv.querySelector('.title').textContent=title;
+    editTaskDiv.querySelector('.date').textContent=format(date,'dd/MM/yyyy');
+    let priorityelem=editTaskDiv.querySelector('.priority');
+    if(priority){
+        priorityelem.src=importantsvg;
+        priorityelem.dataset.status=1;
+    } 
+    else{
+        priorityelem.src=unimportantsvg;
+        priorityelem.dataset.status=0;
+    } 
 }
 
 function deleteTask(deleteElem,lists){

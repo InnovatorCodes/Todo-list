@@ -47,6 +47,23 @@
             <button type="submit">Add Task</button>
         </form>
     </dialog>
+    <dialog id="newNote">
+        <div class="heading">
+            <h2>New Note</h2>
+            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+        </div>
+        <form>
+            <div>
+                <label for="noteTitle">Title</label>
+                <input type="text" id="noteTitle" placeholder="What's on your mind?" class="titleinput" required>
+            </div>
+            <div>
+                <label for="titleDesc">Description</label>
+                <textarea id="titleDesc" rows="5" placeholder="Feel free to elaborate..." class="descinput"></textarea>
+            </div>
+            <button type="submit">Add Note</button>
+        </form>
+    </dialog>
     <div class="main">
         <div class="sidebar">
             <div class="organise">
@@ -78,17 +95,9 @@
         <div class="content"></div>
         <div class="notes">
             <div class="heading"><img src="./images/notes.svg" alt="notes-icon">Notes</div>
-            <div class="addnotebtn"><img src="./images/add.svg" alt="add-note-icon">Add Note</div>
+            <div class="addnotebtn"><img src="./images/add.svg" alt="add-note-icon">New Note</div>
             <hr>
             <div class="notesDiv">
-                <div class="note">
-                    <div class="title">Hello There</div>
-                    <div class="desc">This is my first task</div>
-                    <div class="options">
-                        <img src="./images/edit.svg" alt="edit-task">
-                        <img src="./images/delete.svg" alt="delete-task">
-                    </div>
-                </div>
             </div>
         </div>
     </div>
