@@ -1,15 +1,17 @@
 import "./styles.css";
-import displayAllTasks from "./all-tasks";
-import { createList,deleteList, createListPage, findList } from "./manageLists";
+import { createList,deleteList, createListPage, findList, addListToPage } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 import { createOrganisePage } from "./organiseTasks";
 import { findNote, newNote, editNote, deleteNote } from "./manageNotes";
+import { storeData,retrieveData } from "./manageLocalStorage";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let editingNote=false, editNoteElem;
 let maindiv;
-const listStorage=[];
-let noteStorage=[];
+const listStorage=retrieveData('list');
+const noteStorage=retrieveData('note');
+
+console.log(listStorage);
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
@@ -46,6 +48,7 @@ createListForm.addEventListener('submit',(event)=>{
     createList(title,listStorage);
     resetInputs(createListForm);
     createListDialog.close();
+    storeData(listStorage,noteStorage);
 })
 addTaskDialog.addEventListener('cancel',(event)=>{
     event.preventDefault();
@@ -68,6 +71,7 @@ addTaskForm.addEventListener('submit',(event)=>{
     editingTask=false;
     editTaskElem=undefined;
     addTaskDialog.close();
+    storeData(listStorage,noteStorage);
 })
 
 newNoteDialog.addEventListener('cancel',(event)=>{
@@ -84,6 +88,7 @@ newNoteForm.addEventListener('submit',(event)=>{
     else newNote(title,desc,noteStorage);
     resetInputs(newNoteForm);
     newNoteDialog.close();
+    storeData(listStorage,noteStorage);
     editingNote=false;
     editNoteElem=undefined;
 })
@@ -133,6 +138,7 @@ document.addEventListener('click',(event)=>{
         if(listRef==selectedListRef && status==true){
             changeSelected('lists',document.querySelectorAll('.list')[0]);
         }
+        storeData(listStorage,noteStorage);
     }
     else if(target.classList.contains('list') || target.parentNode.classList.contains('list')){
         let listRef;
@@ -170,9 +176,11 @@ document.addEventListener('click',(event)=>{
         if(target.classList.contains('title')) target=target.parentNode;
         if(!target.classList.contains('completion')) target=target.querySelector('.completion');
         changeCompletion(target,listStorage);
+        storeData(listStorage,noteStorage);
     }
     else if(target.classList.contains('priority')){
         changePriority(target,listStorage);
+        storeData(listStorage,noteStorage);
     }
     else if(target.classList.contains('editTask')){
         editingTask=true;
@@ -190,6 +198,7 @@ document.addEventListener('click',(event)=>{
     }
     else if(target.classList.contains('deleteTask')){
         deleteTask(target,listStorage);
+        storeData(listStorage,noteStorage);
     }
     else if(target.classList.contains('addTaskbtn') || target.parentNode.classList.contains('addTaskbtn')){
         document.querySelector('#addTask .heading h2').textContent='Add Task';
@@ -215,13 +224,19 @@ document.addEventListener('click',(event)=>{
     else if(target.classList.contains('deleteNote')){
         let deleteNoteDiv=target.parentNode.parentNode;
         deleteNote(deleteNoteDiv,noteStorage);
+        storeData(listStorage,noteStorage);
     }
     //console.log(target);
     //console.log(listStorage);
 })
 
 //STARTUP
-createList("My Tasks",listStorage);
+if(listStorage.length==0){
+    createList("My Tasks",listStorage);
+}
+else{
+    listStorage.forEach((list)=>addListToPage(list));
+}
 changeSelected('lists',document.querySelectorAll('.list')[0]);
 const today = (new Date()).toISOString().split('T')[0];
 document.querySelector('#addTask .dateinput').min=today;

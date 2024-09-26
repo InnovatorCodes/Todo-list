@@ -3,7 +3,7 @@ import deletesvg from './images/delete.svg';
 import addsvg from "./images/add.svg";
 
 import { addTaskToPage } from './manageTasks';
-export { createList, deleteList, createListPage, findList };
+export { createList, deleteList, createListPage, findList, addListToPage };
 
 let listCount=0;
 let listRef=0;
@@ -15,8 +15,14 @@ function createList(title,lists){
         taskRefCounter:0
     }
     lists.push(list);
-    const newlist=document.createElement('div');
     list.listRef=listRef;
+    addListToPage(title)
+    listCount++;
+    listRef++;
+}
+
+function addListToPage(list){
+    const newlist=document.createElement('div');
     newlist.dataset.listRef=listRef;
     newlist.classList.add('list');
     const listimg=document.createElement('img');
@@ -28,9 +34,6 @@ function createList(title,lists){
     deletebtn.classList.add('deletelistbtn');
     newlist.append(listimg,div,deletebtn);
     document.querySelector('.lists').appendChild(newlist);
-    listCount++;
-    listRef++;
-    return newlist;
 }
 
 function findList(lists,listref){
