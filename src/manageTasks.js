@@ -32,6 +32,7 @@ function addTask(title,date,priority,description,lists,listRef){
 }
 
 function addTaskToPage(title,date,priority,completionStatus,taskRef,taskIndex,listRef){
+    console.log(arguments);
     const newtask=document.createElement('div');
     newtask.classList.add('task');
     newtask.dataset.taskRef=taskRef;
@@ -72,7 +73,7 @@ function addTaskToPage(title,date,priority,completionStatus,taskRef,taskIndex,li
 }
 
 function findTask(list,taskref){
-    console.log(list);
+    //console.log(list);
     return (list.listTasks.filter((task)=>taskref==task.taskRef))[0];
 }
 

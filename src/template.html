@@ -6,98 +6,106 @@
     <title>GottaDo</title>
 </head>
 <body>
-    <div class="header">
-        GottaDo
-    </div>
-    <dialog id="createlist">
-        <div class="heading">
-            <h2>Create New List</h2>
-            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+    <div class="loading">Loading...</div>
+    <div class="page">
+        <div class="header">
+            GottaDo
         </div>
-        <form>
-            <div>
-                <label for="title">Title</label>
-                <input type="text" id="listTitle" class="titleinput" required>
+        <dialog id="deleteinvalid">
+            <div class="heading"><img src="./images/invalid.svg" alt="">Cannot Delete List</div>
+            <div class="invalidDesc">At least one list must remain in your account. Please keep this list or create a new one before deleting</div>
+            <button type="submit">Ok</button>
+        </dialog>
+        <dialog id="createlist">
+            <div class="heading">
+                <h2>Create New List</h2>
+                <img src="./images/close.svg" alt="close-button" class="cancelbtn">
             </div>
-            <button type="submit">Create List</button>
-        </form>
-    </dialog>
-    <dialog id="addTask">
-        <div class="heading">
-            <h2>Add Task</h2>
-            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
-        </div>
-        <form>
-            <div>
-                <label for="title">Title</label>
-                <input type="text" id="title" placeholder="What do you want to do?" class="titleinput" required>
-            </div>
-            <div>
-                <label for="desc">Description</label>
-                <textarea id="desc" rows="3" placeholder="(If you want to give one)" class="descinput"></textarea>
-            </div>
-            <div>
-                <label for="date">Due Date</label>
-                <input type="date" id="date" class="dateinput" required>
-            </div>
-            <div class="prioritydiv">
-                <input type="checkbox" id="priority" class="priorityinput">
-                <label for="priority">Mark this task as important</label>
-            </div>
-            <button type="submit">Add Task</button>
-        </form>
-    </dialog>
-    <dialog id="newNote">
-        <div class="heading">
-            <h2>New Note</h2>
-            <img src="./images/close.svg" alt="close-button" class="cancelbtn">
-        </div>
-        <form>
-            <div>
-                <label for="noteTitle">Title</label>
-                <input type="text" id="noteTitle" placeholder="What's on your mind?" class="titleinput" required>
-            </div>
-            <div>
-                <label for="titleDesc">Description</label>
-                <textarea id="titleDesc" rows="5" placeholder="Feel free to elaborate..." class="descinput"></textarea>
-            </div>
-            <button type="submit">Add Note</button>
-        </form>
-    </dialog>
-    <div class="main">
-        <div class="sidebar">
-            <div class="organise">
-                <div class="orgAll">
-                    <img src="./images/calendar-all.svg" alt="calendar-all-icon">
-                    All
+            <form>
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" id="listTitle" class="titleinput" required>
                 </div>
-                <div class="orgToday">
-                    <img src="./images/calendar-today.svg" alt="calendar-today-icon">
-                    Today
+                <button type="submit">Create List</button>
+            </form>
+        </dialog>
+        <dialog id="addTask">
+            <div class="heading">
+                <h2>Add Task</h2>
+                <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+            </div>
+            <form>
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" id="title" placeholder="What do you want to do?" class="titleinput" required>
                 </div>
-                <div class="orgWeek">
-                    <img src="./images/calendar-week.svg" alt="calendar-week-icon">
-                    This Week
+                <div>
+                    <label for="desc">Description</label>
+                    <textarea id="desc" rows="3" placeholder="(If you want to give one)" class="descinput"></textarea>
                 </div>
-                <div class="orgImportant">
-                    <img src="./images/calendar-important.svg" alt="calendar-important-icon">
-                    Important
+                <div>
+                    <label for="date">Due Date</label>
+                    <input type="date" id="date" class="dateinput" required>
                 </div>
-                <div class="orgCompleted">
-                    <img src="./images/calendar-completed.svg" alt="calendar-completed-icon">
-                    Completed
+                <div class="prioritydiv">
+                    <input type="checkbox" id="priority" class="priorityinput">
+                    <label for="priority">Mark this task as important</label>
+                </div>
+                <button type="submit">Add Task</button>
+            </form>
+        </dialog>
+        <dialog id="newNote">
+            <div class="heading">
+                <h2>New Note</h2>
+                <img src="./images/close.svg" alt="close-button" class="cancelbtn">
+            </div>
+            <form>
+                <div>
+                    <label for="noteTitle">Title</label>
+                    <input type="text" id="noteTitle" placeholder="What's on your mind?" class="titleinput" required>
+                </div>
+                <div>
+                    <label for="titleDesc">Description</label>
+                    <textarea id="titleDesc" rows="5" placeholder="Feel free to elaborate..." class="descinput"></textarea>
+                </div>
+                <button type="submit">Add Note</button>
+            </form>
+        </dialog>
+        <div class="main">
+            <div class="sidebar">
+                <div class="organise">
+                    <div class="orgAll">
+                        <img src="./images/calendar-all.svg" alt="calendar-all-icon">
+                        All
+                    </div>
+                    <div class="orgToday">
+                        <img src="./images/calendar-today.svg" alt="calendar-today-icon">
+                        Today
+                    </div>
+                    <div class="orgWeek">
+                        <img src="./images/calendar-week.svg" alt="calendar-week-icon">
+                        This Week
+                    </div>
+                    <div class="orgImportant">
+                        <img src="./images/calendar-important.svg" alt="calendar-important-icon">
+                        Important
+                    </div>
+                    <div class="orgCompleted">
+                        <img src="./images/calendar-completed.svg" alt="calendar-completed-icon">
+                        Completed
+                    </div>
+                </div>
+                <div class="lists">
+                    <div class="heading">Lists <img src="./images/add.svg" alt="add-list" class="addlistbtn"></div>
                 </div>
             </div>
-            <div class="lists">
-                <div class="heading">Lists <img src="./images/add.svg" alt="add-list" class="addlistbtn"></div>
-            </div>
-        </div>
-        <div class="content"></div>
-        <div class="notes">
-            <div class="heading"><img src="./images/notes.svg" alt="notes-icon">Notes</div>
-            <div class="addnotebtn"><img src="./images/add.svg" alt="add-note-icon">New Note</div>
-            <hr>
-            <div class="notesDiv">
+            <div class="content"></div>
+            <div class="notes">
+                <div class="heading"><img src="./images/notes.svg" alt="notes-icon">Notes</div>
+                <div class="addnotebtn"><img src="./images/add.svg" alt="add-note-icon">New Note</div>
+                <hr>
+                <div class="notesDiv">
+                </div>
             </div>
         </div>
     </div>

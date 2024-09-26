@@ -1,9 +1,10 @@
 import listsvg from './images/list.svg';
 import deletesvg from './images/delete.svg';
 import addsvg from "./images/add.svg";
+import editsvg from "./images/edit.svg";
 
 import { addTaskToPage } from './manageTasks';
-export { createList, deleteList, createListPage, findList, addListToPage };
+export { createList, editList, deleteList, createListPage, findList, addListToPage, setlistRefCount };
 
 let listCount=0;
 let listRef=0;
@@ -16,9 +17,7 @@ function createList(title,lists){
     }
     lists.push(list);
     list.listRef=listRef;
-    addListToPage(title)
-    listCount++;
-    listRef++;
+    addListToPage(list);
 }
 
 function addListToPage(list){
@@ -28,20 +27,40 @@ function addListToPage(list){
     const listimg=document.createElement('img');
     const div=document.createElement('div');
     div.textContent=list.listTitle;
+    div.classList.add('listTitle');
     listimg.src=listsvg;
+    const editbtn=document.createElement('img');
+    editbtn.src=editsvg;
+    editbtn.classList.add('editlistbtn');
     const deletebtn=document.createElement('img');
     deletebtn.src=deletesvg;
     deletebtn.classList.add('deletelistbtn');
-    newlist.append(listimg,div,deletebtn);
+    newlist.append(listimg,div,editbtn,deletebtn);
     document.querySelector('.lists').appendChild(newlist);
+    listCount++;
+    listRef++;
 }
 
 function findList(lists,listref){
-    console.log(lists,listref);
+    //console.log(lists,listref);
     return (lists.filter((list)=>listref==list.listRef))[0];
 }
+
+function editList(title,editListDiv,listSelected,lists){
+    let listRef=editListDiv.dataset.listRef;
+    let list=findList(lists,listRef);
+    list.listTitle=title;
+    editListOnPage(title,editListDiv,listSelected);
+}
+
+function editListOnPage(title,editListDiv,listSelected){
+    editListDiv.querySelector('.listTitle').textContent=title;
+    if(listSelected) document.querySelector('.maindiv .heading div').textContent=title;
+}
+
 function deleteList(deleteListElem,lists){
     let listRef=deleteListElem.parentNode.dataset.listRef;
+    //console.log(listCount);
     if(listCount>1){
         deleteListElem.classList.add('fadeOut');
         let listIndex=lists.indexOf(findList(lists,listRef));
@@ -51,6 +70,7 @@ function deleteList(deleteListElem,lists){
         //console.log(lists);
         return true;
     }
+    document.querySelector('dialog#deleteinvalid').showModal();
 }
 
 function deleteListFromPage(deleteListElem){
@@ -58,6 +78,7 @@ function deleteListFromPage(deleteListElem){
 }
 
 function createListPage(listElem,lists,prevmaindiv){
+    //console.log(arguments);
     let listRef=listElem.dataset.listRef;
     let list=findList(lists,listRef);
     const maindiv=document.createElement('div');
@@ -89,9 +110,7 @@ function createListPage(listElem,lists,prevmaindiv){
     return maindiv;
 }
 
-/*
-<div class="heading"><img src="./images/list.svg" alt="list-icon"><div>My Tasks</div></div>
-            <div class="addTaskbtn"><img src="./images/add.svg" alt="add-task"><div>Add Task</div></div>
-            <hr>
-            <div class="tasks">
-            </div>*/
+function setlistRefCount(count,ref){
+    listRef=ref;
+    listCount=count;
+}

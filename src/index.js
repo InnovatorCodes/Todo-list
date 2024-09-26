@@ -1,5 +1,5 @@
 import "./styles.css";
-import { createList,deleteList, createListPage, findList, addListToPage } from "./manageLists";
+import { createList,deleteList, createListPage, findList, addListToPage, setlistRefCount, editList } from "./manageLists";
 import { addTask, findTask, editTask, deleteTask, changeCompletion, changePriority } from "./manageTasks";
 import { createOrganisePage } from "./organiseTasks";
 import { findNote, newNote, editNote, deleteNote } from "./manageNotes";
@@ -7,11 +7,12 @@ import { storeData,retrieveData } from "./manageLocalStorage";
 
 let currentTab='mytasks', selectedListRef=0, editingTask=false, editTaskElem;
 let editingNote=false, editNoteElem;
+let editingList=false, editListElem, listSelected=false;
 let maindiv;
 const listStorage=retrieveData('list');
 const noteStorage=retrieveData('note');
 
-console.log(listStorage);
+//console.log(listStorage);
 
 function resetInputs(form){
     form.querySelectorAll('input').forEach((inputelem)=>{
@@ -31,6 +32,10 @@ const addTaskForm= document.querySelector('#addTask form');
 const newNoteForm= document.querySelector('#newNote form');
 const cancelbtns=document.querySelectorAll('dialog .cancelbtn');
 
+document.querySelector('dialog#deleteinvalid button').addEventListener('click',()=>{
+    //console.log(document.querySelector('dialog#deleteinvalid'));
+    document.querySelector('dialog#deleteinvalid').close();
+})
 cancelbtns.forEach((btn)=>{
     btn.addEventListener('click',(event)=>{
         resetInputs(event.target.parentNode.parentNode);
@@ -45,8 +50,12 @@ createListDialog.addEventListener('cancel',(event)=>{
 createListForm.addEventListener('submit',(event)=>{
     event.preventDefault();
     let title=document.querySelector('#createlist .titleinput').value;
-    createList(title,listStorage);
+    if(editingList) editList(title,editListElem,listSelected,listStorage);
+    else createList(title,listStorage);
     resetInputs(createListForm);
+    editingList=false;
+    editListElem=undefined;
+    listSelected=false;
     createListDialog.close();
     storeData(listStorage,noteStorage);
 })
@@ -61,12 +70,8 @@ addTaskForm.addEventListener('submit',(event)=>{
     let desc=document.querySelector('#addTask .descinput').value;
     let priority=document.querySelector('#addTask .priorityinput').checked;
     let date=new Date(document.querySelector('#addTask .dateinput').value);
-    if(editingTask){
-        editTask(title,date,priority,desc,editTaskElem,listStorage)
-    }
-    else{
-        addTask(title,date,priority,desc,listStorage,selectedListRef);
-    }
+    if(editingTask) editTask(title,date,priority,desc,editTaskElem,listStorage)
+    else addTask(title,date,priority,desc,listStorage,selectedListRef);
     resetInputs(addTaskForm);
     editingTask=false;
     editTaskElem=undefined;
@@ -97,9 +102,10 @@ function changeSelected(classname,listElem){
     let currentSelected=document.querySelector('.selected');
     if(currentSelected) currentSelected.classList.remove('selected');
     if(classname=='lists'){
-        //console.log(listElem);
+        //console.log(listElem,listStorage);
         selectedListRef=listElem.dataset.listRef;
         maindiv=createListPage(listElem,listStorage,maindiv);
+        //console.log(maindiv.parentNode);
         listElem.classList.add('selected');
     }
     else{
@@ -129,11 +135,24 @@ document.addEventListener('click',(event)=>{
         changeSelected('Completed');
     }
     else if(target.classList.contains('addlistbtn')){
+        document.querySelector('#createlist .heading h2').textContent='Create List';
+        document.querySelector('#createlist button').textContent='Create List';
+        createListDialog.showModal();
+    }
+    else if(target.classList.contains('editlistbtn')){
+        document.querySelector('#createlist .heading h2').textContent='Edit List Name'
+        document.querySelector('#createlist button').textContent='Confirm';
+        let listRef=target.parentNode.dataset.listRef;
+        let list=findList(listStorage,listRef);
+        editingList=true;
+        editListElem=target.parentNode;
+        if(selectedListRef==listRef) listSelected=true;
+        createListDialog.querySelector('.titleinput').value=list.listTitle;
         createListDialog.showModal();
     }
     else if(target.classList.contains('deletelistbtn')){
-        //console.log('hi')
         let listRef=target.parentNode.dataset.listRef;
+        //console.log(listRef);
         let status=deleteList(target,listStorage);
         if(listRef==selectedListRef && status==true){
             changeSelected('lists',document.querySelectorAll('.list')[0]);
@@ -231,12 +250,21 @@ document.addEventListener('click',(event)=>{
 })
 
 //STARTUP
+//console.log(listStorage.length);
 if(listStorage.length==0){
     createList("My Tasks",listStorage);
 }
 else{
+    setlistRefCount(listStorage.length-1,listStorage[0].listRef);
     listStorage.forEach((list)=>addListToPage(list));
 }
-changeSelected('lists',document.querySelectorAll('.list')[0]);
+//console.log(listStorage.length);
+//console.log(document.querySelector('.list'));
+setTimeout(()=>{
+    changeSelected('lists',(document.querySelectorAll('.list'))[0]);
+},200)
 const today = (new Date()).toISOString().split('T')[0];
 document.querySelector('#addTask .dateinput').min=today;
+setTimeout(()=>{
+    document.querySelector('.loading').style.display='none';
+},250);
