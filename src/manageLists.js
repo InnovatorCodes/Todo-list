@@ -88,7 +88,7 @@ function createListPage(listElem,lists,prevmaindiv){
     const listImg=document.createElement('img');
     listImg.src=listsvg;
     const title=document.createElement('div');
-    //console.log(listElem,lists,list,listRef);
+    console.log(listElem,lists,list,listRef);
     title.textContent=list.listTitle;
     heading.append(listImg,title);
     const addTaskBtn=document.createElement('div');
